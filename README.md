@@ -4,10 +4,10 @@ OAuth Junkies
 
 ##Members
 
-Vahid Mazdeh 
-Nir Boneh 
-Zhili Yang
-Tristan Wagar
+Vahid Mazdeh <br />
+Nir Boneh  <br />
+Zhili Yang <br />
+Tristan Wagar <br />
 
 ##Overview
 
@@ -25,7 +25,7 @@ OAuth <br />
 
 ##Learning 
 
-OAuth, various APIs, sessions, database management, ReactJS, UI Design, mongoDB, and team management 
+OAuth, various APIs, sessions, database management, ReactJS, UI Design, and team management 
 
 ##Responsibilities
 
