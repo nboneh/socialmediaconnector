@@ -29,7 +29,7 @@ OAuth, various APIs, sessions, database management, ReactJS, UI Design, and team
 
 ##Responsibilities
 
-Nir - oauth, sessions, database, and views <br />
+Nir - OAuth, sessions, database, and views <br />
 Vahid - Database, Backend Logic, UI/UX Design <br />
 Zhili-  Database, the code of oauth and sessions  <br />
 Tristan- Database, logic and sessions <br />
