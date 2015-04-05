@@ -15,13 +15,13 @@ A framework to hook up multiple social web API’s with a web application using 
 
 ##Technology
 
-NodeJS
-ExpressJS
-ReactJS
-mongoDB
-Heroku
-Bootstrap
-OAuth
+NodeJS  <br />
+ExpressJS  <br />
+ReactJS  <br />
+mongoDB <br />
+Heroku <br />
+Bootstrap <br />
+OAuth <br />
 
 ##Learning 
 
@@ -29,10 +29,10 @@ OAuth, various APIs, sessions, database management, ReactJS, UI Design, mongoDB,
 
 ##Responsibilities
 
-Nir - oauth, sessions, database, and views
-Vahid - Database, Backend Logic, UI/UX Design
-Zhili-  Database, the code of oauth and sessions 
-Tristan- Database, logic and sessions
+Nir - oauth, sessions, database, and views <br />
+Vahid - Database, Backend Logic, UI/UX Design <br />
+Zhili-  Database, the code of oauth and sessions  <br />
+Tristan- Database, logic and sessions <br />
 
 ##Milestones
 
