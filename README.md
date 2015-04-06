@@ -38,5 +38,5 @@ Tristan- Database, logic and sessions <br />
 
 1. Create a user based system, including session key registrations and logins
 2. Create a single wall from one oauth website
-3. Create multiple walls from multiple oauth websites
+3. Modify the single wall to include multiple oauth websites
 4. Improve the overall UI design
