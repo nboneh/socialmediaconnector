@@ -24,22 +24,38 @@ var LoginScreen = React.createClass({
   },
   render: function() {
     return (
-      <div className="loginBox">
-        <h1>Login</h1>
-          <form className="onLoginSubmit" onSubmit={this.handleLoginSubmit}>
-      <div className="row form">
-          User Name: 
-            <input type="text" name="userName" ref="userName" required/>
-            Password: 
-            <input type="password" name="password" ref="password" required/>
-
+      <div id="middlediv">
+        <div class = "row">
+          <div class = "col-md-4 col-md-offset-7">
+            <div class = "panel panel-default">
+              <div class = "panel-heading"> <strong class="">Login</strong>
+              </div>
+              <div class = "panel-body">
+                <form class = "form-horizontal" role = "form">
+                  <div class = "form-group">
+                    <label for = "inputUsername" class = "col-sm-3 control-label">Username</label>
+                    <div class = "col-sm-9">
+                      <input type = "username" class = "form-control" id = "inputUsername" placeholder = "Username" required = ""></input>
+                    </div>
+                  </div>
+                  <div class = "form-group">
+                    <label for = "inputPassword" class = "col-sm-3 control-label">Password</label>
+                    <div class = "col-sm-9">
+                      <input type = "password" class = "form-control" id = "inputPassword" placeholder = "Password" required = ""></input>
+                    </div>
+                  </div>
+                  <div class = "form-group-last">
+                    <div class = "col-sm-offset-3 col-sm-9">
+                      <button type = "submit" class = "btn btn-success btn-sm">Login</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-          
-
-        <input type="submit" value="Login!" />
-      
-      </form>
-      </div>
+        
     );
   }
 });
