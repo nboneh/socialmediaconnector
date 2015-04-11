@@ -1,6 +1,5 @@
 var express = require('express');
 var app = express();
-var cool = require('cool-ascii-faces');
 
 
 app.set('port', (process.env.PORT || 5000));
@@ -11,6 +10,10 @@ app.listen(app.get('port'), function() {
 })
 
 var pg = require('pg');
+
+app.post('/login', function (request, response) {
+   console.log("SUP")
+})
 
 
 app.get('/db', function (request, response) {

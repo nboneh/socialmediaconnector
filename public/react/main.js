@@ -3,31 +3,24 @@
 //   {author: "Jordan Walke", text: "This is *another* comment"}
 // ];
 
-var LoginScreen = React.createClass({
 
-  
-  handleLoginSubmit: function(form) {
-    var newComments = comments.concat([comment]);
-    this.setState({data: newComments});
-    $.ajax({
-      url: this.props.url,
-      dataType: 'json',
-      type: 'POST',
-      data: comment,
-      success: function(data) {
-        this.setState({data: data});
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
-    });
-  },
+var LoginScreen = React.createClass({
+    render: function() {
+      return(
+           <div className="loginScreen">
+    <LoginBox />
+    <RegisterBox />
+    </div>
+    );
+  }
+});
+var LoginBox = React.createClass({
   render: function() {
     return (
       <div className="loginBox">
         <h1>Login</h1>
-          <form className="onLoginSubmit" onSubmit={this.handleLoginSubmit}>
-      <div className="row form">
+          <form className="onLoginSubmit" method="post" action="login">
+      <div className="loginForm">
           User Name: 
             <input type="text" name="userName" ref="userName" required/>
             Password: 
@@ -43,6 +36,32 @@ var LoginScreen = React.createClass({
     );
   }
 });
+
+var RegisterBox =  React.createClass({
+  render: function() {
+    return (
+      <div className="registerBox">
+        <h1>Register</h1>
+          <form className="onRegisterSubmit" method="post" action="register">
+      <div className="registerForm">
+            User Name: 
+            <input type="text" name="userName" ref="userName" required/>
+            Password: 
+            <input type="password" name="password" ref="password" required/>
+            Confirm Password: 
+           <input type="password" name="password" ref="password" required/>
+
+      </div>
+          
+
+        <input type="submit" value="Register!" />
+      
+      </form>
+      </div>
+    );
+  }
+});
+
 
 React.render(
   <LoginScreen />,
