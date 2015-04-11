@@ -11,12 +11,36 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
+
+var login = function (userName, password){
+	var hashpass = crypto.createHash("md5").update(password).digest('hex');
+	var queryText = 'select exists(select 1 from Users where username=\'' + userName + '\' and hashpass= \'' + hashpass + '\')';
+		pg.connect(DB_URL
+ , function(err, client, done) {
+	 client.query(queryText, function(err, result) {
+      done();
+      if (err)
+       { console.error(err);  }
+      else
+       { 
+       	if(result.rows[0].exists == true)
+       	{ console.log("Successful")} 
+		else 
+			{ console.log("asshole")}
+		}
+    });
+	});
+  }
+
+
+
 app.listen(app.get('port'), function() {
   console.log("Node app is running at localhost:" + app.get('port'))
 })
 
-app.post('/login', function (request, response) {
-   console.log("SUP")
+app.post('/login', function (req, res) {
+   login(req.body.userName, req.body.password);
+   res.redirect("/");
 })
 
 app.post('/register', function (req, res) {
@@ -30,10 +54,11 @@ var queryText = "INSERT INTO Users(username,hashpass) VALUES($1, $2) RETURNING i
  , function(err, client, done) {
  	client.query(queryText, [user, hashpass], function(err, result){
  		if(err){
- 			console.log("ERROR REGISTERING!!!" + err) 
+ 			console.error("ERROR REGISTERING: " + err) 
  		}
  		else {
-
+ 			login(user,req.body.password );
+ 			res.redirect("/");
  		}
  	})
  })
