@@ -47,13 +47,11 @@ var RegisterBox =  React.createClass({
             User Name: 
             <input type="text" name="userName" ref="userName" required/>
             Password: 
-            <input type="password" name="password" ref="password" required/>
+            <input type="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" onchange="form.re-password.pattern = this.value;" ref="password" required/>
             Confirm Password: 
-           <input type="password" name="password" ref="password" required/>
+           <input type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="re-password" ref="re-password" required/>
 
       </div>
-          
-
         <input type="submit" value="Register!" />
       
       </form>
