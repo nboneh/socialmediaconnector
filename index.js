@@ -4,6 +4,7 @@ var DB_URL = process.env.DATABASE_URL || "postgres://qyczllslpshilf:C5b-rPxAiZ88
 var bodyParser = require('body-parser');
 var pg = require('pg');
 var crypto = require('crypto');
+var session = require('client-sessions');
 
 
 app.set('port', (process.env.PORT || 5000));
@@ -12,7 +13,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 
-var login = function (userName, password){
+
+var login = function (userName, password, req){
 	var hashpass = crypto.createHash("md5").update(password).digest('hex');
 	var queryText = 'select exists(select 1 from Users where username=\'' + userName + '\' and hashpass= \'' + hashpass + '\')';
 		pg.connect(DB_URL
@@ -24,9 +26,11 @@ var login = function (userName, password){
       else
        { 
        	if(result.rows[0].exists == true)
-       	{ console.log("Successful")} 
+       	{ console.log("Successful Login");
+       req.session.isAuthenticated = true; 
+   			} 
 		else 
-			{ console.log("asshole")}
+			{ console.log("Fail Login!")}
 		}
     });
 	});
@@ -38,8 +42,14 @@ app.listen(app.get('port'), function() {
   console.log("Node app is running at localhost:" + app.get('port'))
 })
 
+app.get('/session', function (req, res) {
+   res.setHeader('Content-Type', 'application/json');
+   console.log(req.session.isAuthenticated)
+    res.send(req.session);
+})
+
 app.post('/login', function (req, res) {
-   login(req.body.userName, req.body.password);
+   login(req.body.userName, req.body.password, req);
    res.redirect("/");
 })
 
@@ -57,7 +67,7 @@ var queryText = "INSERT INTO Users(username,hashpass) VALUES($1, $2) RETURNING i
  			console.error("ERROR REGISTERING: " + err) 
  		}
  		else {
- 			login(user,req.body.password );
+ 			login(user,req.body.password ,req);
  			res.redirect("/");
  		}
  	})

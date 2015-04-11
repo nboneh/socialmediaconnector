@@ -11,7 +11,8 @@
     "express": "~4.9.x",
     "body-parser": "^1.4.3",
     "passport": "*",
-    "crypto": "*"
+    "crypto": "*",
+    "client-sessions": "*"
   },
   "engines": {
     "node": "0.12.x"
