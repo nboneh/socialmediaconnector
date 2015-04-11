@@ -19,7 +19,7 @@ var LoginBox = React.createClass({
     return (
       <div className="loginBox">
         <h1>Login</h1>
-          <form className="onLoginSubmit" method="post" action="login">
+          <form className="onLoginSubmit" method="post" action="/login">
       <div className="loginForm">
           User Name: 
             <input type="text" name="userName" ref="userName" required/>
@@ -42,14 +42,14 @@ var RegisterBox =  React.createClass({
     return (
       <div className="registerBox">
         <h1>Register</h1>
-          <form className="onRegisterSubmit" method="post" action="register">
+          <form className="onRegisterSubmit" method="post" action="/register">
       <div className="registerForm">
             User Name: 
             <input type="text" name="userName" ref="userName" required/>
             Password: 
-            <input type="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" onchange="form.re-password.pattern = this.value;" ref="password" required/>
+            <input type="password" name="password" pattern=".{6,}" onchange="form.re-password.pattern = this.value;" ref="password" required/>
             Confirm Password: 
-           <input type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="re-password" ref="re-password" required/>
+           <input type="password" pattern=".{6,}" name="re-password" required/>
 
       </div>
         <input type="submit" value="Register!" />

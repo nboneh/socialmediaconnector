@@ -9,7 +9,9 @@
   "dependencies": {
     "pg": "4.x",
     "express": "~4.9.x",
-    "passport": "*"
+    "body-parser": "^1.4.3",
+    "passport": "*",
+    "crypto": "*"
   },
   "engines": {
     "node": "0.12.x"
