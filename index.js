@@ -55,7 +55,7 @@ app.listen(app.get('port'), function() {
 })
 
 
-app.get('/session', function (req, res) {
+app.get('/session.json', function (req, res) {
    res.setHeader('Content-Type', 'application/json');
     res.send(req.session);
 })

@@ -6,15 +6,42 @@
 
 var MainPage = React.createClass({
 
+   getInitialState: function(){
+    return {session:{}};
+  },
+
+  componentDidMount: function(){
+    $.ajax({
+      url: "session.json",
+      dataType: 'json',
+      success: function(data) {
+        this.setState({session: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error("Session request failed", status, err.toString());
+
+      }.bind(this)
+    });
+  },
+
     render: function() {
+      console.log( this.state.session)
+      if(this.state.session.user == undefined){
       return(
            <div className="loginScreen">
     <LoginBox />
     <RegisterBox />
     </div>
     );
-  }
-});
+  } else {
+    return(
+  <div className="mainPage">
+  <h1> {this.state.session.user} </h1>
+  </div>
+  );
+}
+}
+})
 var LoginBox = React.createClass({
   render: function() {
     return (
