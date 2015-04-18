@@ -7,6 +7,14 @@ var crypto = require('crypto');
 var session = require('client-sessions');
 
 
+
+app.use(session({
+  cookieName: 'session',
+  secret: '4206942069sixtynine',
+  duration: 30 * 60 * 1000,
+  activeDuration: 5 * 60 * 1000,
+}));
+
 app.set('port', (process.env.PORT || 5000));
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
@@ -26,11 +34,12 @@ var login = function (userName, password, req){
       else
        { 
        	if(result.rows[0].exists == true)
-       	{ console.log("Successful Login");
-       req.session.isAuthenticated = true; 
+       	{ 
+          console.log("Successful Login");
+       req.session.vahid  = userName; 
    			} 
 		else 
-			{ console.log("Fail Login!")}
+			{ console.error("Fail Login!")}
 		}
     });
 	});
@@ -42,10 +51,10 @@ app.listen(app.get('port'), function() {
   console.log("Node app is running at localhost:" + app.get('port'))
 })
 
+
 app.get('/session', function (req, res) {
    res.setHeader('Content-Type', 'application/json');
-   console.log(req.session.isAuthenticated)
-    res.send(req.session);
+    res.send(req.session.vahid);
 })
 
 app.post('/login', function (req, res) {
