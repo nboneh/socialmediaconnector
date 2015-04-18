@@ -1,6 +1,6 @@
 ##Team Name 
 
-OAuth Junkies 
+SellOut-CashIn-BroDown (Formerly OAuth Junkies)
 
 ##Members
 
@@ -11,7 +11,7 @@ Tristan Wagar <br />
 
 ##Overview
 
-A framework to hook up multiple social web API’s with a web application using OAuth. Users will log in once and be able to view their various news feeds from as many social websites as they want.
+A social media website that sends anonymous messages to random users in a userbase. Users are given a choice to let the message die or to pass it on to other users. Messages are sent to two users when passed on so they get passed on exponentially.
 
 ##Technology
 
@@ -25,7 +25,7 @@ OAuth <br />
 
 ##Learning 
 
-OAuth, various APIs, sessions, database management, ReactJS, UI Design, and team management 
+sessions, user interaction, database management, ReactJS, UI Design, and team management 
 
 ##Responsibilities
 
@@ -37,6 +37,6 @@ Tristan- Database, logic and sessions <br />
 ##Milestones
 
 1. Create a user based system, including session key registrations and logins
-2. Create a single wall from one oauth website
-3. Modify the single wall to include multiple oauth websites
+2. Create a database for users and messages
+3. Finish the funcionality and basic UI
 4. Improve the overall UI design
