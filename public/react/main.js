@@ -25,7 +25,6 @@ var MainPage = React.createClass({
   },
 
     render: function() {
-      console.log( this.state.session)
       if(this.state.session.user == undefined){
       return(
            <div className="loginScreen">
@@ -87,6 +86,9 @@ var RegisterBox =  React.createClass({
     );
   }
 });
+
+var Wall =React.createClass({
+  )};
 
 
 React.render(
