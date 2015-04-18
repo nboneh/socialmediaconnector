@@ -22,27 +22,30 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 
 
-var login = function (userName, password, req){
-	var hashpass = crypto.createHash("md5").update(password).digest('hex');
-	var queryText = 'select exists(select 1 from Users where username=\'' + userName + '\' and hashpass= \'' + hashpass + '\')';
-		pg.connect(DB_URL
+var login = function (req, res){
+  var userName = req.body.userName;
+  var password = req.body.password;
+  var hashpass = crypto.createHash("md5").update(password).digest('hex');
+  var queryText = 'select exists(select 1 from Users where username=\'' + userName + '\' and hashpass= \'' + hashpass + '\')';
+    pg.connect(DB_URL
  , function(err, client, done) {
-	 client.query(queryText, function(err, result) {
+   client.query(queryText, function(err, result) {
       done();
       if (err)
        { console.error(err);  }
       else
        { 
-       	if(result.rows[0].exists == true)
-       	{ 
+        if(result.rows[0].exists == true)
+        { 
           console.log("Successful Login");
-       req.session.vahid  = userName; 
-   			} 
-		else 
-			{ console.error("Fail Login!")}
-		}
+          req.session.user  = userName; 
+          res.redirect("/");
+        } 
+    else 
+      { console.error("Fail Login!")}
+    }
     });
-	});
+  });
   }
 
 
@@ -54,13 +57,18 @@ app.listen(app.get('port'), function() {
 
 app.get('/session', function (req, res) {
    res.setHeader('Content-Type', 'application/json');
-    res.send(req.session.vahid);
+    res.send(req.session);
 })
 
 app.post('/login', function (req, res) {
-   login(req.body.userName, req.body.password, req);
-   res.redirect("/");
+   login( req, res);
 })
+
+app.post('/logout', function (req, res) {
+    req.session.reset();
+    res.redirect("/");
+})
+
 
 app.post('/register', function (req, res) {
 
@@ -71,15 +79,15 @@ var queryText = "INSERT INTO Users(username,hashpass) VALUES($1, $2) RETURNING i
  
  pg.connect(DB_URL
  , function(err, client, done) {
- 	client.query(queryText, [user, hashpass], function(err, result){
- 		if(err){
- 			console.error("ERROR REGISTERING: " + err) 
- 		}
- 		else {
- 			login(user,req.body.password ,req);
- 			res.redirect("/");
- 		}
- 	})
+  client.query(queryText, [user, hashpass], function(err, result){
+    if(err){
+      console.error("ERROR REGISTERING: " + err) 
+    }
+    else {
+      login(user,req.body.password ,req);
+      res.redirect("/");
+    }
+  })
  })
 })
 

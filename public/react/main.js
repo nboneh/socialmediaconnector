@@ -6,23 +6,6 @@
 
 var MainPage = React.createClass({
 
-   getInitialState: function(){
-    return {session:{isAuthenticated:false}};
-  },
-
-  componentDidMount: function(){
-    $.ajax({
-      url: "session",
-      dataType: 'json',
-      success: function(data) {
-        this.setState({session:data});
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error("Session request failed", status, err.toString());
-      }.bind(this)
-    });
-  },
-
     render: function() {
       return(
            <div className="loginScreen">
