@@ -64,6 +64,10 @@ app.post('/login', function (req, res) {
    login( req, res);
 })
 
+app.post('/twig', function(req, res){
+  console.log("asdjasjd/")
+})
+
 app.post('/logout', function (req, res) {
     req.session.reset();
     res.redirect("/");

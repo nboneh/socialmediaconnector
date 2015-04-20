@@ -36,6 +36,7 @@ var MainPage = React.createClass({
     return(
   <div className="mainPage">
   <h1> {this.state.session.user} </h1>
+  <PostItForm />
   </div>
   );
 }
@@ -87,8 +88,20 @@ var RegisterBox =  React.createClass({
   }
 });
 
-var Wall =React.createClass({
-  )};
+var PostItForm =React.createClass({
+    render: function() {
+      return (
+    <div className="twigBox" method="post" action="/twig">
+  <form>
+  <textarea rows="4" cols="50" name="twig" pattern=".{5,255}" ref="textarea"></textarea>
+   <input type="submit" value="Submit!" />
+      
+    </form>
+    </div>
+    );
+  }
+});
+
 
 
 React.render(
