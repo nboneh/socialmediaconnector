@@ -1,7 +1,7 @@
 {
-  "name": "node-js-getting-started",
+  "name": "Messanger",
   "version": "0.1.3",
-  "description": "A sample Node.js app using Express 4",
+  "description": "Message",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"

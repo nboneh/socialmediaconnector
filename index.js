@@ -64,13 +64,13 @@ app.post('/login', function (req, res) {
    login( req, res);
 })
 
-app.post('/twig', function(req, res){
+app.post('/message', function(req, res){
   console.log("asdjasjd/")
 })
 
-app.post('/logout', function (req, res) {
+app.delete('/logout', function (req, res) {
     req.session.reset();
-    res.redirect("/");
+    console.log("Successful Logout!")
 })
 
 
@@ -88,8 +88,7 @@ var queryText = "INSERT INTO Users(username,hashpass) VALUES($1, $2) RETURNING i
       console.error("ERROR REGISTERING: " + err) 
     }
     else {
-      login(user,req.body.password ,req);
-      res.redirect("/");
+      login(req,res);
     }
   })
  })
