@@ -46,8 +46,23 @@ var login = function (req, res){
     }
     });
   });
-  }
+}
 
+var post = function(req, res){
+
+}
+
+var fly = function(req, res){
+
+}
+
+var inbox = function(req, res){
+
+}
+
+var outbox = function(req, res){
+  
+}
 
 
 app.listen(app.get('port'), function() {
