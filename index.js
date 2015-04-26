@@ -21,8 +21,32 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 
-var flyFunction = function(req, res){
-  
+var fly = function(messageId){
+  var queryText = "SELECT id FROM Users WHERE NOT message_received_list @> ARRAY[" + messageId +  " ] AND NOT message_sent_list @>  ARRAY[" + messageId + "] ORDER BY RANDOM() LIMIT 2"
+  pg.connect(DB_URL
+ , function(err, client, done) {
+   client.query(queryText, function(err, result) {
+      done();
+      if (err)
+       { console.error(err);  }
+      else
+       { 
+        var rows = result.rows;
+        for(i  in rows){
+            var userId = rows[i].id;
+            console.log(userId)
+           var sendQuery = "UPDATE Users set message_received_list = array_append(message_received_list, $1) WHERE id=" + userId;
+           console.log(sendQuery)
+
+            client.query(sendQuery, [messageId] ,function(err, result) {
+                 if (err){ console.error(err);  }
+                 else {console.log("IT IS ALRIGHT")}
+            })
+
+        }
+       }
+     })
+ })
 }
 
 var login = function (req, res){
@@ -88,6 +112,7 @@ app.post('/message', function(req, res){
           }
           else {
             // PASSITON FUNCTION
+            fly(messageId)
           }
         })
       } // first else
