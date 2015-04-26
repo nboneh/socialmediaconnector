@@ -95,7 +95,7 @@ var PostItForm =React.createClass({
       return (
     <div className="messageBox" method="post" action="/message">
   <form>
-  <textarea rows="4" cols="50" name="twig" pattern=".{5,255}" ref="textarea"></textarea>
+  <textarea rows="4" cols="50" name="message" pattern=".{5,255}" ref="message"></textarea>
    <input type="submit" value="Submit!" />
       
     </form>

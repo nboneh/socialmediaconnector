@@ -26,7 +26,8 @@ var login = function (req, res){
   var userName = req.body.userName;
   var password = req.body.password;
   var hashpass = crypto.createHash("md5").update(password).digest('hex');
-  var queryText = 'select exists(select 1 from Users where username=\'' + userName + '\' and hashpass= \'' + hashpass + '\')';
+  var queryText = 'select id from Users where username=\'' + userName + '\' and hashpass=\'' + hashpass + '\'';
+  console.log(queryText)
     pg.connect(DB_URL
  , function(err, client, done) {
    client.query(queryText, function(err, result) {
@@ -35,33 +36,19 @@ var login = function (req, res){
        { console.error(err);  }
       else
        { 
-        if(result.rows[0].exists == true)
+        if(result.rows[0] != undefined)
         { 
           console.log("Successful Login");
           req.session.user  = userName; 
+          req.session.user_id =result.rows[0].id;
           res.redirect("/");
         } 
     else 
-      { console.error("Fail Login!")}
+      { console.error("Fail Login!")
+        res.redirect("/")}
     }
     });
   });
-}
-
-var post = function(req, res){
-
-}
-
-var fly = function(req, res){
-
-}
-
-var inbox = function(req, res){
-
-}
-
-var outbox = function(req, res){
-  
 }
 
 
@@ -80,12 +67,13 @@ app.post('/login', function (req, res) {
 })
 
 app.post('/message', function(req, res){
-  console.log("asdjasjd/")
+  var message = req.body.message
 })
 
 app.delete('/logout', function (req, res) {
     req.session.reset();
     console.log("Successful Logout!")
+    res.redirect(303, '/')
 })
 
 
