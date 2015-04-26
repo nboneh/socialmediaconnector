@@ -93,8 +93,8 @@ var RegisterBox =  React.createClass({
 var PostItForm =React.createClass({
     render: function() {
       return (
-    <div className="messageBox" method="post" action="/message">
-  <form>
+    <div className="messageBox">
+  <form  method="post" action="/message">
   <textarea rows="4" cols="50" name="message" pattern=".{5,255}" ref="message"></textarea>
    <input type="submit" value="Submit!" />
       

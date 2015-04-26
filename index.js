@@ -21,6 +21,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 
+var flyFunction = function(req, res){
+  
+}
 
 var login = function (req, res){
   var userName = req.body.userName;
@@ -67,8 +70,31 @@ app.post('/login', function (req, res) {
 })
 
 app.post('/message', function(req, res){
-  var message = req.body.message
+  var message = req.body.message;
+  var user_id = req.session.user_id;
+
+  var messageQuery = "INSERT INTO messages(content, user_id, user_list) VALUES($1, $2,$3) RETURNING id"
+
+  pg.connect(DB_URL,
+  function(err, client, done) {
+    client.query(messageQuery, [message, user_id, [user_id]], function(err, result) {
+      if(err){
+       }
+      else {
+        messageId = result.rows[0].id
+        var userQuery = "UPDATE Users set message_sent_list = array_append(message_sent_list, $1) WHERE id=" + user_id;
+        client.query(userQuery, [messageId], function(err, result){
+          if(err){
+          }
+          else {
+            // PASSITON FUNCTION
+          }
+        })
+      } // first else
+    }) // query closed
+   })
 })
+
 
 app.delete('/logout', function (req, res) {
     req.session.reset();
