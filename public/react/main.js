@@ -21,18 +21,38 @@ var MainPage = React.createClass({
     },
 
     render: function() {
+        
         if(this.state.session.user == undefined) {
             return (
                 <div className="loginScreen">
-                    <LoginBox />
-                        <RegisterBox />
+                    <nav className="navbar navbar-default">
+                            <div className="container-fluid">
+                                <LoginBox />
+                            </div>
+                    </nav>
+
+                    <RegisterBox />
+                
                 </div>
             );
         } else {
             return (
                 <div className="mainPage">
-                    <h1> {this.state.session.user} </h1>
-                    <LogoutButton />
+
+                    <nav className="navbar navbar-default">
+                        <div className="container-fluid">
+
+                                <div className="navbar-header">
+                                    <a className="navbar-brand" href="#">{this.state.session.user}</a>
+                                </div>
+
+                                <div className="navbar-right">
+                                     <LogoutButton />
+                                </div>
+
+                        </div>
+                    </nav>
+
                     <PostItForm />
                 </div>
             );
@@ -45,15 +65,25 @@ var LoginBox = React.createClass({
     render: function() {
         return (
             <div className="loginBox">
-                <h1>Login</h1>
+
                     <form className="onLoginSubmit" method="post" action="/login">
-                        <div className="loginForm">
-                            User Name: 
-                            <input type="text" name="userName" ref="userName" required/>
-                            Password: 
-                            <input type="password" name="password" ref="password" required/>
-                        </div>
-                        <input type="submit" value="Login!" />
+                    <div className="loginForm">
+                            
+                           
+                            <div className="form-group col-md-3">
+                                <input type="text" className="form-control" name="userName" id="userName" ref="userName" placeholder="Username" required/>
+                            </div>                        
+
+                            <div className="form-group col-md-3">
+                                <input type="password" className="form-control" name="password" ref="password" placeholder="Password" required />
+                            </div>
+
+                            <div className="form-group col-md-3">
+                                <button type="submit" className="btn btn-primary" value="Login!">Login</button>
+                            </div>
+
+                     
+                    </div>
                     </form>
             </div>
         );
@@ -64,21 +94,46 @@ var RegisterBox =  React.createClass({
 
     render: function() {
         return (
-            <div className="registerBox">
-                <h1>Register</h1>
-                <form className="onRegisterSubmit" method="post" action="/register">
-                    <div className="registerForm">
-                        User Name: 
-                        <input type="text" name="userName" ref="userName" required/>
-                        Password: 
-                        <input type="password" name="password" pattern=".{6,}" onchange="form.re-password.pattern = this.value;" ref="password" required/>
-                        Confirm Password: 
-                        <input type="password" pattern=".{6,}" name="re-password" required/>
-                    </div>
-                    <input type="submit" value="Register!" />
-                </form>
-            </div>
-        );
+                <div className="registerBox">
+                    <h4>Dont have an account? Create one now.</h4>
+
+                    <form role="form" data-toggle="validator" method="post" action="/register">
+                            
+                        <div className="row">
+                            <div className="form-group col-md-4">
+                                <input type="text" className="form-control" name="userName" id="userName" ref="userName" placeholder="Username" required />
+                            </div>
+                        </div>
+
+                        <div className="row">
+                            <div className="form-group col-md-4">
+                                
+                                <div className="form-group">
+                                    <input type="password" className="form-control" name="password" id="password" ref="password" data-minlength="6" placeholder="Password" required />
+                                    <span className="help-block"></span>
+                                </div>
+
+
+                                <div className="form-group">
+                                    <input type="password" className="form-control" name="re-password" id="re-password" data-match="password" data-match-error="Whoops, these don't match" placeholder="Confirm" required />
+                                    <div className="help-block with-errors"></div>
+                                </div>
+
+                        
+                            </div>
+                        </div>
+
+
+                        <div className="form-group">
+                            <button type="submit" className="btn btn-primary" value="Register!">Register</button>
+                        </div>
+
+
+                    </form>
+            
+                </div>
+
+    );
     }
 });
 
@@ -88,9 +143,22 @@ var PostItForm =React.createClass({
     render: function() {
         return (
             <div className="messageBox">
-                <form  method="post" action="/message">
-                    <textarea rows="4" cols="50" name="message" pattern=".{5,255}" ref="message"></textarea>
-                    <input type="submit" value="Submit!" />  
+
+                <form method="post" action="/message">
+
+                <div className="row">
+                    <div className="form-group col-md-12">
+
+                    <textarea className="form-control" rows="2" name="message" ref="message" placeholder="Send something to a stranger..."></textarea>
+
+                    </div>
+
+                </div>
+                    
+                <div className="form-group">
+                    <button type="submit" className="btn btn-primary col-md-3" value="Fly">FLY</button>
+                </div>
+
                 </form>
             </div>
         );
@@ -111,9 +179,7 @@ var LogoutButton = React.createClass({
 
     render: function() {
         return (
-            <div className="logoutButton">
-                <button onClick={this.logout}>Logout!</button>
-            </div>
+            <a className="navbar-text glyphicon glyphicon-log-out" onClick={this.logout}></a>
         );
     }
 
