@@ -20,6 +20,16 @@ var MainPage = React.createClass({
         });
     },
 
+    getErrorMessage: function(){
+        var idx = document.URL.indexOf('=');
+        if(idx > 0){
+            var message = document.URL.substring(idx+1).replace(/%20/g," ");
+            return message;
+        }
+        else
+            return "";
+    },
+
     render: function() {
         
         if(this.state.session.user == undefined) {
@@ -31,6 +41,7 @@ var MainPage = React.createClass({
                     <div className="container">
                         <div className="navbar-header">
                             <a className="navbar-brand" href="#">Fly Or Die</a>
+                            <p className='error-message'><code> {this.getErrorMessage()}</code> </p>
                         </div>
 
                         <div className="navbar-collapse collapse">
@@ -90,7 +101,6 @@ var LoginBox = React.createClass({
     render: function() {
         return (
             <div className="loginBox">
-
                     <form className="onLoginSubmit" method="post" action="/login">
                     <div className="loginForm">
                             
@@ -128,7 +138,7 @@ var RegisterBox =  React.createClass({
                             
                         <div className="row">
                             <div className="form-group">
-                                <input type="text" className="form-control" name="userName" id="userName" ref="userName" placeholder="Username" required />
+                                <input type="text" pattern=".{3,}" required title="3 characters minimum" className="form-control" name="userName" id="userName" ref="userName" placeholder="Username" required />
                             </div>
                         </div>
 
@@ -136,13 +146,13 @@ var RegisterBox =  React.createClass({
                             <div className="form-group">
                                 
                                 <div className="form-group">
-                                    <input type="password" className="form-control" name="password" id="password" ref="password" data-minlength="6" placeholder="Password" required />
+                                    <input type="password" pattern=".{6,}" required title="6 characters minimum" className="form-control" name="password" id="password" ref="password" data-minlength="6" placeholder="Password" required />
                                     <span className="help-block"></span>
                                 </div>
 
 
                                 <div className="form-group">
-                                    <input type="password" className="form-control" name="re-password" id="re-password" data-match="password" data-match-error="Whoops, these don't match" placeholder="Confirm" required />
+                                    <input type="password" pattern=".{6,}" required title="6 characters minimum" className="form-control"  name="confirmpassword"  ref="confirmpassword" id="confirmpassword" data-minlength="6"   placeholder="Confirm" required />
                                     <div className="help-block with-errors"></div>
                                 </div>
 

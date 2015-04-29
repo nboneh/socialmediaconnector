@@ -33,7 +33,9 @@ var login = function (req, res){
             done();
             
             if (err) {
+                console.error("Wrong Username or Password!")
                 console.error(err);
+                res.redirect("/?message=Wrong Username or Password!");
             }
             else {
                 if (result.rows[0] != undefined) { 
@@ -44,7 +46,7 @@ var login = function (req, res){
                 } 
                 else { 
                     console.error("Fail Login!")
-                    res.redirect("/")
+                    res.redirect("/?message=Wrong Username or Password!");
                 }
             }
         });
@@ -138,6 +140,10 @@ app.post('/message', function(req, res){
 
 
 app.post('/register', function (req, res) {
+    if(req.body.confirmpassword !=  req.body.password){
+        res.redirect("/?message=Passwords do not match!");
+        return;
+    }
 
     var user = req.body.userName;
     var hashpass = crypto.createHash("md5").update(req.body.password).digest('hex');
@@ -148,6 +154,7 @@ app.post('/register', function (req, res) {
             if(err) {
                 // handle error
                 console.error("ERROR REGISTERING: " + err) 
+                res.redirect("/?message=Username Already Exists!");
             }
             else {
                 login(req,res);
