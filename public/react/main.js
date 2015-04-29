@@ -2,17 +2,24 @@
 var MainPage = React.createClass({
     
     getInitialState: function() {
-        return {
-            session:{}
+        return { session:{},
+        outbox:true
         };
     },
+
+    isOutbox: function(){
+        var idx = document.URL.indexOf('outbox');
+        return idx != -1;
+        
+    },
+
 
     componentDidMount: function() {
         $.ajax({
             url: "session.json",
             dataType: 'json',
             success: function(data) {
-                this.setState({session: data});
+                this.setState({session: data, outbox: this.state.outbox});
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error("Session request failed", status, err.toString());
@@ -20,6 +27,50 @@ var MainPage = React.createClass({
         });
     },
 
+    outboxClick: function(){
+        this.setState({session: this.state.session, outbox: true});
+    },
+
+    inboxClick: function(){
+        this.setState({session: this.state.session, outbox: false});
+    },
+
+    render: function() {
+        
+        if(this.state.session.user == undefined) {
+            return (
+                <div className="loginScreen">
+                     <LoginNavBar />
+                    <RegisterBox />
+                </div>
+            );
+        } else {
+             if(this.state.outbox ){
+                return(
+                 <div className="mainPage">
+                <NavBar user={this.state.session.user} outboxClick={this.outboxClick} inboxClick={this.inboxClick}/>
+                <div className="row">
+                    <p> OUTBOX MAN </p>
+                </div>
+                </div>
+                )
+             } else {
+            return (
+                <div className="mainPage">
+                <NavBar user={this.state.session.user} outboxClick={this.outboxClick} inboxClick={this.inboxClick}/>
+                <div className="row">
+                    <PostItForm />
+                    <Inbox />
+                </div>
+                </div>
+                        
+            );
+        }
+         }
+    }
+});
+
+var LoginNavBar  = React.createClass ({
     getErrorMessage: function(){
         var idx = document.URL.indexOf('=');
         if(idx > 0){
@@ -30,13 +81,10 @@ var MainPage = React.createClass({
             return "";
     },
 
-    render: function() {
-        
-        if(this.state.session.user == undefined) {
-            return (
-                <div className="loginScreen">
 
-                    
+     render: function() {
+          return (
+
                     <nav className="navbar navbar-default navbar-static-top">
                     <div className="container">
                         <div className="navbar-header">
@@ -53,31 +101,36 @@ var MainPage = React.createClass({
                     </div>
                     </nav>
 
-                <div className="container">
 
-                        <RegisterBox />
-                </div>
-                
+            )
+}
+})
 
-                </div>
-            );
-        } else {
-            return (
-                <div className="mainPage">
+var NavBar =  React.createClass ({
+    outboxClick: function(){
+        this.props.outboxClick();
+    },
 
-                    <nav className="navbar navbar-default navbar-static-top">
+    inboxClick:function(){
+           this.props.inboxClick();
+    },
+
+     render: function() {
+
+         return (
+              <nav className="navbar navbar-default navbar-static-top">
                         <div className="container">
 
 
                                 <div className="navbar-header">
-                                    <a className="navbar-brand" href="#">{this.state.session.user}</a>
+                                    <a className="navbar-brand" href="#">{this.props.user}</a>
                                 </div>
 
                                 <div className="navbar-collapse collapse">
                                     <ul className="nav navbar-nav navbar-right">
                                         
-                                        <li><a href="#">Inbox</a></li>
-                                        <li><a href="#">Outbox</a></li>
+                                       <li><a href="#" onClick={this.inboxClick}>Inbox</a></li>
+                                         <li><a href="#" onClick={this.outboxClick}>Outbox</a> </li>
                                         <li><LogoutButton /></li>
                                     </ul>
                                 </div>
@@ -85,15 +138,68 @@ var MainPage = React.createClass({
                         </div>
                     </nav>
 
-                <div className="row">
-                    <PostItForm />
-                </div>
-                        
-                </div>
-            );
-        }
-    }
+        );
+     }
+ });
+
+
+var Inbox = React.createClass ({
+     getInitialState: function() {
+        return {
+            inbox:[]
+        };
+    },
+
+    componentDidMount: function() {
+        $.ajax({
+            url: "inbox.json",
+            dataType: 'json',
+            success: function(data) {
+                this.setState({inbox: data});
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error("Inbox request failed", status, err.toString());
+            }.bind(this)
+        });
+    },
+     render: function() {
+         return (
+            <div className="inbox">
+                <InboxList data={this.state.inbox}/>
+            </div>
+        )
+     }
+
+
 })
+
+var InboxList = React.createClass({
+       render: function() {
+        var inboxMessages = this.props.data.map(function (message){
+         return (
+            <InboxMessage content= {message.content}>
+            </InboxMessage>
+        );
+     });
+         return (
+            <div className= "inboxMessages">
+                {inboxMessages}
+            </div>
+        )
+     }
+});
+
+var InboxMessage = React.createClass({
+  render: function() {
+    return (
+      <div className="message">
+        <h2 className="content">
+          {this.props.content}
+        </h2>
+      </div>
+    );
+  }
+});
 
 
 var LoginBox = React.createClass({

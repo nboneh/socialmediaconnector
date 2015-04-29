@@ -53,9 +53,9 @@ var login = function (req, res){
     });
 }
 
-var fly = function(messageId) {
+var fly = function(messageId,res) {
 
-    var queryText = "SELECT id FROM Users WHERE NOT message_received_list @> ARRAY[" + messageId +  " ] AND NOT message_sent_list @>  ARRAY[" + messageId + "] ORDER BY RANDOM() LIMIT 2"
+    var queryText = "SELECT id FROM Users WHERE NOT message_received_list @> ARRAY[" +  messageId +  " ]  AND NOT message_sent_list @>  ARRAY[" + messageId + "] AND NOT message_passed_list @>  ARRAY[" + messageId + "]  ORDER BY RANDOM() LIMIT 2";
   
     pg.connect(DB_URL, function(err, client, done) {
         client.query(queryText, function(err, result) {
@@ -68,11 +68,16 @@ var fly = function(messageId) {
           
             else { 
                 var rows = result.rows;
+                var numOfUsers = rows.length;
+                if(numOfUsers == 0 ){
+                    res.redirect("/");
+                    return;
+                }
+                var ids = []
                 for (i in rows) {
-                    var userId = rows[i].id; 
-                    console.log(userId)
-                    var sendQuery = "UPDATE Users set message_received_list = array_append(message_received_list, $1) WHERE id=" + userId;
-                    console.log(sendQuery)
+                   ids.push(rows[i].id); 
+                }
+                var sendQuery = "UPDATE Users set message_received_list = array_append(message_received_list, $1) WHERE id IN (" + ids + ")";
                       
                     client.query(sendQuery, [messageId] ,function(err, result) {
                         if (err) {
@@ -80,15 +85,89 @@ var fly = function(messageId) {
                           console.error(err);
                         }
                         else {
-                          console.log("IT IS ALRIGHT")
+                          var updateMessage = "UPDATE Messages set user_list = array_cat(user_list, ARRAY[ " + ids + "]) WHERE id=" + messageId;
+                        
+                        client.query(updateMessage, function(err, result) {
+                        if (err) {
+                          // handle error
+                          console.error(err);
+                        } else {
+                
+                                res.redirect("/")
+
                         }
+                        })
+                    }   
                     })
                 }
-            }
 
         })
     })
 }
+var getMessages = function(result,message_ids_passed){
+    var returnJSON = []
+                if(result == undefined){
+                    return returnJSON;
+                }
+                 var rows = result.rows;
+                 for(i in rows){
+                    var row = rows[i]
+                    var messageObj = {}
+                    var id = row.id;
+                    if(message_ids_passed != undefined){
+                     if(message_ids_passed.indexOf(id) != -1)
+                        messageObj.passed = true;
+                    else 
+                        messageObj.passed = false;
+                    }
+                    messageObj.content = row.content;
+                    messageObj.time_created = row.time_created;
+                    messageObj.times_passed = row.user_list.length;
+                    if(message_ids_passed != undefined){
+                    messageObj.user = row.username;
+                    }
+                    returnJSON.push(messageObj)
+           }
+           return returnJSON;
+}
+
+app.get('/inbox.json', function(req,res){
+    var returnJSON = []
+    var message_ids_passed = []
+    var message_ids_received = []
+    var user_id = req.session.user_id;
+     pg.connect(DB_URL, function(err, client, done) {
+         var queryText = "SELECT message_received_list, message_passed_list FROM Users WHERE id = "+ user_id;
+        client.query(queryText, function(err, result) {
+            done();
+            message_ids_received= result.rows[0].message_received_list;
+            message_ids_ = result.rows[0].message_passed_list
+            all_ids = message_ids_passed.concat(message_ids_received)
+             var queryText2 = "SELECT * FROM Messages WHERE id IN (" + all_ids + ")";
+            client.query(queryText2, function(err, result) {
+                 res.send(getMessages(result, message_ids_passed))
+            })
+        
+      })
+    })
+ })
+
+app.get('/outbox.json', function(req,res){
+        var returnJSON = []
+    var user_id = req.session.user_id;
+     pg.connect(DB_URL, function(err, client, done) {
+         var queryText = "SELECT message_sent_list FROM Users WHERE id = "+ user_id;
+        client.query(queryText, function(err, result) {
+            done();
+             var queryText2 = "SELECT * FROM Messages WHERE id IN (" + result.rows[0].message_sent_list + ")";
+            client.query(queryText2, function(err, result) {
+                 res.send(getMessages(result, undefined))
+            })
+        
+      })
+    })
+ })
+
 
 
 app.listen(app.get('port'), function() {
@@ -114,10 +193,11 @@ app.post('/message', function(req, res){
     
     var message = req.body.message;
     var user_id = req.session.user_id;
-    var messageQuery = "INSERT INTO messages(content, user_id, user_list) VALUES($1, $2,$3) RETURNING id"
+    var userName = req.session.user;
+    var messageQuery = "INSERT INTO messages(content, user_id, username) VALUES($1, $2, $3) RETURNING id"
 
     pg.connect(DB_URL, function(err, client, done) {
-        client.query(messageQuery, [message, user_id, [user_id]], function(err, result) {
+        client.query(messageQuery, [message, user_id,  userName], function(err, result) {
             if(err) {
                 //hadnle error
             }
@@ -130,7 +210,7 @@ app.post('/message', function(req, res){
                     // handle error
                     }
                     else {
-                    fly(messageId)
+                    fly(messageId,res)
                     }
                 })
             }
