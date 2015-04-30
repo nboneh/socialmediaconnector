@@ -45,8 +45,13 @@ var login = function (req, res){
                     res.redirect("/");
                 } 
                 else { 
+
+                    // handle error
+                    // let user know whats wrong
+                    // need a function here
                     console.error("Fail Login!")
-                    res.redirect("/?message=Wrong Username or Password!");
+                    // res.redirect("/?message=Wrong Username or Password!");
+                    res.redirect('/');
                 }
             }
         });
@@ -233,8 +238,11 @@ app.post('/register', function (req, res) {
         client.query(queryText, [user, hashpass], function(err, result) {
             if(err) {
                 // handle error
+                // let user know what's wrong -- need another functino to take care of it
+
                 console.error("ERROR REGISTERING: " + err) 
-                res.redirect("/?message=Username Already Exists!");
+                // only refreshes the page!!!
+                res.redirect("/");
             }
             else {
                 login(req,res);
