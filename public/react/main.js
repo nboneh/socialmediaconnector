@@ -1,5 +1,3 @@
-
-
 var MainPage = React.createClass({
     
     getInitialState: function() {
@@ -7,12 +5,6 @@ var MainPage = React.createClass({
         outbox:null
         };
     },
-
-    // isOutbox: function(){
-    //     var idx = document.URL.indexOf('outbox');
-    //     return idx != -1;
-        
-    // },
 
     componentDidMount: function() {
         $.ajax({
@@ -88,11 +80,9 @@ var LoginNavBar  = React.createClass ({
 
                     </div>
                     </nav>
-
-
-            )
+            );
 }
-})
+});
 
 var NavBar =  React.createClass ({
     outboxClick: function(){
@@ -161,14 +151,16 @@ var RegisterBox =  React.createClass({
 
     var pass1 = document.getElementById('password');
     var pass2 = document.getElementById('confirmpassword');
+    var butt =  document.getElementById("button");
+    var confirm = document.getElementById("confirm");
 
     if(pass1.value == pass2.value){
-        document.getElementById("confirm").className= "has-success";
-        document.getElementById("button").disabled=false;
+        confirm.className= "has-success";
+        butt.disabled=false;
 
     } else {
-        document.getElementById("confirm").className= "has-error";
-        document.getElementById("button").disabled=true;
+        confirm.className= "has-error";
+        butt.disabled=true;
     }
 },
 
