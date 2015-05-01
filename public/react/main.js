@@ -167,9 +167,9 @@ var RegisterBox =  React.createClass({
     render: function() {
         return (
                 <div className="container">    
-                <div className="jumbotron col-md-offset-3 col-md-6">
+                <div className="jumbotron col-md-offset-3 col-md-4">
                 <div className="registerBox">
-                    <h4>Dont have an account? Create one now.</h4>
+                    <h4 className="col-md-3 col-md-offset-4">Signup!</h4>
 
                     <form role="form" data-toggle="validator" method="post" action="/register">
                             
@@ -197,7 +197,7 @@ var RegisterBox =  React.createClass({
 
 
                         <div className="form-group">
-                            <button id="button" disabled type="submit" className="btn btn-primary" value="Register!">Register</button>
+                            <button id="button" disabled type="submit" className="btn btn-primary col-md-12" value="Register!">Signup</button>
                         </div>
 
 
