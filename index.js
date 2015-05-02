@@ -178,6 +178,33 @@ app.post('/login', function (req, res) {
     login(req, res);
 })
 
+app.put('/fly', function (req, res) {
+    var messageId = req.body.messageId;
+    var query = "UPDATE Users set message_passed_list = array_append(message_sent_list, $1) WHERE id=" + user_id;
+
+    pg.connect(DB_URL, function(err, client, done) {
+        client.query(messageQuery, [messageId], function(err, result) {
+            if(err) {
+                //hadnle error
+            }
+            else {
+                var userQuery = "UPDATE Users set message_received_list = array_remove(message_sent_list, $1) WHERE id=" + user_id;
+                
+                client.query(userQuery, [messageId], function(err, result) {
+                    if(err){
+                    // handle error
+                    }
+                    else {
+                    fly(messageId,res)
+                    }
+                })
+            }
+        })
+    })
+
+    fly(messageId ,res)
+})
+
 app.get('/session.json', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.send(req.session);
