@@ -42,7 +42,8 @@ var MainPage = React.createClass({
                     <div className="mainPage">
                         <NavBar user={this.state.session.user} outboxClick={this.outboxClick} inboxClick={this.inboxClick}/>
                         <div className="row">
-                            <p> OUTBOX MAN </p>
+                            <PostItForm />
+                            <Outbox />
                         </div>
                     </div>
                 )
@@ -300,7 +301,7 @@ var InboxList = React.createClass({
        render: function() {
         var inboxMessages = this.props.data.map(function (message){
          return (
-            <InboxMessage content= {message.content} times_passed={message.times_passed} creator={message.user} received={message.time_created}>
+            <InboxMessage id={message.id} content= {message.content} times_passed={message.times_passed} creator={message.user} received={message.time_created}>
             </InboxMessage>
         );
      });
@@ -318,6 +319,7 @@ var InboxMessage = React.createClass({
         $.ajax({
             url: '/fly',
             type: 'PUT',
+            data: {id: this.props.id},
             success: function(result) {
                  window.location = '/';
             }
@@ -342,6 +344,90 @@ var InboxMessage = React.createClass({
                     <td>{this.props.times_passed}</td>
                     <td>{this.props.recieved}</td>
                     <td><button type="button" className="btn btn-primary" onClick={this.fly}>FLY!</button></td>
+                    
+                </tr>
+            </table>
+        </h2>
+      </div>
+    );
+  }
+});
+
+
+// inbox -- module export this
+var Outbox = React.createClass ({displayName: 'Outbox',
+     getInitialState: function() {
+        return {
+            outbox:[]
+        };
+    },
+
+    componentDidMount: function() {
+        $.ajax({
+            url: "outbox.json",
+            dataType: 'json',
+            success: function(data) {
+                this.setState({outbox: data});
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error("Outbox request failed", status, err.toString());
+            }.bind(this)
+        });
+    },
+     render: function() {
+         return (
+            <div className="outbox">
+                <OutboxList data={this.state.outbox}/>
+            </div>
+        )
+     }
+
+
+});
+
+var OutboxList = React.createClass({
+       render: function() {
+        var outboxMessages = this.props.data.map(function (message){
+         return (
+            <OutboxMessage content= {message.content} times_passed={message.times_passed} received={message.time_created}>
+            </OutboxMessage>
+        );
+     });
+         return (
+            <div className= "outboxMessages">
+                {outboxMessages}
+            </div>
+        )
+     }
+});
+
+var OutboxMessage = React.createClass({
+
+    // fly: function() {
+    //     $.ajax({
+    //         url: '/fly',
+    //         type: 'PUT',
+    //         success: function(result) {
+    //              window.location = '/';
+    //         }
+    //     });
+    // },
+
+
+  render: function() {
+    return (
+      <div className="message">
+        <h2 className="container content">
+            <table className="table table-responsive">
+                    <th>Outbox</th>
+                    <th>Count</th>
+                    <th>Sent On</th>
+                    <th></th>
+                    
+                <tr>
+                    <td>{this.props.content}</td>
+                    <td>{this.props.times_passed}</td>
+                    <td>{this.props.recieved}</td>
                     
                 </tr>
             </table>
