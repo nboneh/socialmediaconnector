@@ -75,7 +75,7 @@ var fly = function(messageId,res) {
                 var rows = result.rows;
                 var numOfUsers = rows.length;
                 if(numOfUsers == 0 ){
-                    res.redirect("/");
+                       res.redirect("/");
                     return;
                 }
                 var ids = []
@@ -97,8 +97,7 @@ var fly = function(messageId,res) {
                           // handle error
                           console.error(err);
                         } else {
-                
-                                res.redirect("/")
+                                   res.redirect("/")
 
                         }
                         })

@@ -313,7 +313,7 @@ var InboxList = React.createClass({
         render: function() {
         var inboxMessages = this.props.data.map(function (message){
          return (       
-                <InboxMessage id={message.id} content= {message.content} times_passed={message.times_passed} creator={message.user} received={message.time_created}>
+                <InboxMessage id={message.id} content= {message.content} times_passed={message.times_passed} creator={message.user} received={message.time_created} passed={message.passed}>
                 </InboxMessage>
         );
      });
@@ -351,6 +351,7 @@ var InboxMessage = React.createClass({
 
 
   render: function() {
+    if(this.props.passed){
     return (
 
         <tr>
@@ -358,11 +359,22 @@ var InboxMessage = React.createClass({
             <td>{this.props.creator}</td>
             <td>{this.props.times_passed}</td>
             <td>{this.props.recieved}</td>
-            <td><button type="button" className="btn btn-primary" onClick={this.fly}>FLY!</button></td>
         </tr> 
     );
-  }
-});
+  } else {
+        return (
+    <tr>
+            <td>{this.props.content}</td>
+            <td>{this.props.creator}</td>
+            <td>{this.props.times_passed}</td>
+            <td>{this.props.recieved}</td>
+            <td><button type="button" className="btn btn-primary" onClick={this.fly}>FLY!</button></td>
+     </tr> 
+     )
+}
+}
+})
+
 
 
 // outbox -- module export this
