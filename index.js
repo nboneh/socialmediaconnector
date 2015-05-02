@@ -187,7 +187,7 @@ app.post('/login', function (req, res) {
 app.put('/fly', function (req, res) {
     var messageId = req.body.id;
     var user_id = req.session.user_id;
-    var query = "UPDATE Users set message_passed_list = array_append(message_sent_list, $1) WHERE id=" + user_id;
+    var query = "UPDATE Users set message_passed_list = array_append(message_passed_list, $1) WHERE id=" + user_id;
 
     pg.connect(DB_URL, function(err, client, done) {
         client.query(query, [messageId], function(err, result) {
@@ -195,7 +195,7 @@ app.put('/fly', function (req, res) {
                 //hadnle error
             }
             else {
-                 query = "UPDATE Users set message_received_list = array_remove(message_sent_list, $1) WHERE id=" + user_id;
+                 query = "UPDATE Users set message_received_list = array_remove(message_received_list, $1) WHERE id=" + user_id;
                 
                 client.query(query, [messageId], function(err, result) {
                     if(err){
@@ -209,7 +209,6 @@ app.put('/fly', function (req, res) {
         })
     })
 
-    fly(messageId ,res)
 })
 
 app.get('/session.json', function (req, res) {
