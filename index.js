@@ -147,9 +147,9 @@ app.get('/inbox.json', function(req,res){
         client.query(queryText, function(err, result) {
             done();
             message_ids_received= result.rows[0].message_received_list;
-            message_ids_ = result.rows[0].message_passed_list
+            message_ids_passed = result.rows[0].message_passed_list
             all_ids = message_ids_passed.concat(message_ids_received)
-             var queryText2 = "SELECT * FROM Messages WHERE id IN (" + all_ids + ")";
+             var queryText2 = "SELECT * FROM Messages WHERE id IN (" + all_ids + ") ORDER BY time_created DESC";
             client.query(queryText2, function(err, result) {
                  res.send(getMessages(result, message_ids_passed))
             })
@@ -165,7 +165,7 @@ app.get('/outbox.json', function(req,res){
          var queryText = "SELECT message_sent_list FROM Users WHERE id = "+ user_id;
         client.query(queryText, function(err, result) {
             done();
-             var queryText2 = "SELECT * FROM Messages WHERE id IN (" + result.rows[0].message_sent_list + ")";
+             var queryText2 = "SELECT * FROM Messages WHERE id IN (" + result.rows[0].message_sent_list + ") ORDER BY time_created DESC" ;
             client.query(queryText2, function(err, result) {
                  res.send(getMessages(result, undefined))
             })
