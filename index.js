@@ -131,6 +131,7 @@ var getMessages = function(result,message_ids_passed){
                     if(message_ids_passed != undefined){
                     messageObj.user = row.username;
                     }
+                    messageObj.id = id;
                     returnJSON.push(messageObj)
            }
            return returnJSON;
@@ -181,6 +182,34 @@ app.listen(app.get('port'), function() {
 
 app.post('/login', function (req, res) {
     login(req, res);
+})
+
+app.put('/fly', function (req, res) {
+    var messageId = req.body.messageId;
+    var user_id = req.session.user_id;
+    var query = "UPDATE Users set message_passed_list = array_append(message_sent_list, $1) WHERE id=" + user_id;
+
+    pg.connect(DB_URL, function(err, client, done) {
+        client.query(query, [messageId], function(err, result) {
+            if(err) {
+                //hadnle error
+            }
+            else {
+                 query = "UPDATE Users set message_received_list = array_remove(message_sent_list, $1) WHERE id=" + user_id;
+                
+                client.query(query, [messageId], function(err, result) {
+                    if(err){
+                    // handle error
+                    }
+                    else {
+                    fly(messageId,res)
+                    }
+                })
+            }
+        })
+    })
+
+    fly(messageId ,res)
 })
 
 app.get('/session.json', function (req, res) {
