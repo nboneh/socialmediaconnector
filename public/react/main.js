@@ -310,17 +310,28 @@ var Inbox = React.createClass ({displayName: 'Inbox',
 });
 
 var InboxList = React.createClass({
-       render: function() {
+        render: function() {
         var inboxMessages = this.props.data.map(function (message){
-         return (
-            <InboxMessage id={message.id} content= {message.content} times_passed={message.times_passed} creator={message.user} received={message.time_created}>
-            </InboxMessage>
+         return (       
+                <InboxMessage id={message.id} content= {message.content} times_passed={message.times_passed} creator={message.user} received={message.time_created}>
+                </InboxMessage>
         );
      });
          return (
-            <div className= "inboxMessages">
+        <div className="container">
+            <table className="table table-responsive">
+                <thead>
+                <tr>
+                    <th>Inbox</th>
+                    <th>Created By</th>
+                    <th>Count</th>
+                    <th>Recieved On</th>
+                </tr>
+                </thead>
                 {inboxMessages}
-            </div>
+            </table>
+
+        </div>
         )
      }
 });
@@ -341,32 +352,20 @@ var InboxMessage = React.createClass({
 
   render: function() {
     return (
-      <div className="message">
-        <h2 className="container content">
-            <table className="table table-responsive">
-                    <th>Inbox</th>
-                    <th>Created By</th>
-                    <th>Count</th>
-                    <th>Recieved On</th>
-                    <th></th>
-                    
-                <tr>
-                    <td>{this.props.content}</td>
-                    <td>{this.props.creator}</td>
-                    <td>{this.props.times_passed}</td>
-                    <td>{this.props.recieved}</td>
-                    <td><button type="button" className="btn btn-primary" onClick={this.fly}>FLY!</button></td>
-                    
-                </tr>
-            </table>
-        </h2>
-      </div>
+
+        <tr>
+            <td>{this.props.content}</td>
+            <td>{this.props.creator}</td>
+            <td>{this.props.times_passed}</td>
+            <td>{this.props.recieved}</td>
+            <td><button type="button" className="btn btn-primary" onClick={this.fly}>FLY!</button></td>
+        </tr> 
     );
   }
 });
 
 
-// inbox -- module export this
+// outbox -- module export this
 var Outbox = React.createClass ({displayName: 'Outbox',
      getInitialState: function() {
         return {
@@ -398,53 +397,40 @@ var Outbox = React.createClass ({displayName: 'Outbox',
 });
 
 var OutboxList = React.createClass({
-       render: function() {
+        render: function() {
         var outboxMessages = this.props.data.map(function (message){
-         return (
-            <OutboxMessage content= {message.content} times_passed={message.times_passed} received={message.time_created}>
-            </OutboxMessage>
+         return (       
+                <OutboxMessage id={message.id} content= {message.content} times_passed={message.times_passed} creator={message.user} received={message.time_created}>
+                </OutboxMessage>
         );
      });
          return (
-            <div className= "outboxMessages">
+        <div className="container">
+            <table className="table table-responsive">
+                <thead>
+                <tr>
+                    <th>Inbox</th>
+                    <th>Count</th>
+                    <th>Recieved On</th>
+                </tr>
+                </thead>
                 {outboxMessages}
-            </div>
+            </table>
+
+        </div>
         )
      }
 });
 
 var OutboxMessage = React.createClass({
-
-    // fly: function() {
-    //     $.ajax({
-    //         url: '/fly',
-    //         type: 'PUT',
-    //         success: function(result) {
-    //              window.location = '/';
-    //         }
-    //     });
-    // },
-
-
   render: function() {
     return (
-      <div className="message">
-        <h2 className="container content">
-            <table className="table table-responsive">
-                    <th>Outbox</th>
-                    <th>Count</th>
-                    <th>Sent On</th>
-                    <th></th>
-                    
-                <tr>
-                    <td>{this.props.content}</td>
-                    <td>{this.props.times_passed}</td>
-                    <td>{this.props.recieved}</td>
-                    
-                </tr>
-            </table>
-        </h2>
-      </div>
+
+        <tr>
+            <td>{this.props.content}</td>
+            <td>{this.props.times_passed}</td>
+            <td>{this.props.recieved}</td>
+        </tr> 
     );
   }
 });
