@@ -75,7 +75,7 @@ var fly = function(messageId,res) {
                 var rows = result.rows;
                 var numOfUsers = rows.length;
                 if(numOfUsers == 0 ){
-                       res.redirect("/");
+                       res.redirect(303, "/");
                     return;
                 }
                 var ids = []
@@ -97,7 +97,7 @@ var fly = function(messageId,res) {
                           // handle error
                           console.error(err);
                         } else {
-                                   res.redirect("/")
+                                   res.redirect(303, "/")
 
                         }
                         })
@@ -248,6 +248,16 @@ app.post('/message', function(req, res){
             }
         })
     })
+})
+
+app.put('/inbox', function (req, res) {
+    req.session.outbox = false;
+   res.send("inbox");
+})
+
+app.put('/outbox', function (req, res) {
+    req.session.outbox = true;
+     res.send("outbox");
 })
 
 

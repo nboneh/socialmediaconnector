@@ -1,17 +1,15 @@
 var MainPage = React.createClass({
     
     getInitialState: function() {
-        return { session:{},
-        outbox:null
-        };
+        return { session:{}};
     },
 
-    componentDidMount: function() {
+    updateSession: function(){
         $.ajax({
             url: "session.json",
             dataType: 'json',
             success: function(data) {
-                this.setState({session: data, outbox: this.state.outbox});
+                this.setState({session: data});
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error("Session request failed", status, err.toString());
@@ -19,12 +17,29 @@ var MainPage = React.createClass({
         });
     },
 
+    componentDidMount: function() {
+        this.updateSession();
+    },
+
     outboxClick: function(){
-        this.setState({session: this.state.session, outbox: true});
+        $.ajax({
+            url: '/outbox',
+            type: 'PUT',
+            success: function(result) {
+                this.updateSession();
+            }.bind(this)
+        });
     },
 
     inboxClick: function(){
-        this.setState({session: this.state.session, outbox: false});
+         $.ajax({
+            url: '/inbox',
+            type: 'PUT',
+            success: function(result) {
+                this.updateSession();
+            }.bind(this)
+        });
+        
     },
 
     render: function() {
@@ -37,7 +52,7 @@ var MainPage = React.createClass({
                 </div>
             );
         } else {
-             if(this.state.outbox){
+             if(this.state.session.outbox ){
                 return(
                     <div className="mainPage">
                         <NavBar user={this.state.session.user} outboxClick={this.outboxClick} inboxClick={this.inboxClick}/>
@@ -322,7 +337,7 @@ var InboxList = React.createClass({
             <table className="table table-responsive">
                 <thead>
                 <tr>
-                    <th>Inbox</th>
+                    <th>Message</th>
                     <th>Created By</th>
                     <th>Count</th>
                     <th>Created On</th>
@@ -344,6 +359,7 @@ var InboxMessage = React.createClass({
             type: 'PUT',
             data: {id: this.props.id},
             success: function(result) {
+                console.log("YO")
                  window.location = '/';
             }.bind(this),
         });
@@ -425,7 +441,7 @@ var OutboxList = React.createClass({
             <table className="table table-responsive">
                 <thead>
                 <tr>
-                    <th>Inbox</th>
+                    <th>Message</th>
                     <th>Count</th>
                     <th>Sent On</th>
                 </tr>
