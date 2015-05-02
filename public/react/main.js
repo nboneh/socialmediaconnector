@@ -1,18 +1,10 @@
-
 var MainPage = React.createClass({
     
     getInitialState: function() {
         return { session:{},
-        outbox:true
+        outbox:null
         };
     },
-
-    isOutbox: function(){
-        var idx = document.URL.indexOf('outbox');
-        return idx != -1;
-        
-    },
-
 
     componentDidMount: function() {
         $.ajax({
@@ -45,23 +37,23 @@ var MainPage = React.createClass({
                 </div>
             );
         } else {
-             if(this.state.outbox ){
+             if(this.state.outbox){
                 return(
-                 <div className="mainPage">
-                <NavBar user={this.state.session.user} outboxClick={this.outboxClick} inboxClick={this.inboxClick}/>
-                <div className="row">
-                    <p> OUTBOX MAN </p>
-                </div>
-                </div>
+                    <div className="mainPage">
+                        <NavBar user={this.state.session.user} outboxClick={this.outboxClick} inboxClick={this.inboxClick}/>
+                        <div className="row">
+                            <p> OUTBOX MAN </p>
+                        </div>
+                    </div>
                 )
              } else {
             return (
                 <div className="mainPage">
-                <NavBar user={this.state.session.user} outboxClick={this.outboxClick} inboxClick={this.inboxClick}/>
-                <div className="row">
-                    <PostItForm />
-                    <Inbox />
-                </div>
+                    <NavBar user={this.state.session.user} outboxClick={this.outboxClick} inboxClick={this.inboxClick}/>
+                    <div className="row">
+                        <PostItForm />
+                        <Inbox />
+                    </div>
                 </div>
                         
             );
@@ -71,17 +63,6 @@ var MainPage = React.createClass({
 });
 
 var LoginNavBar  = React.createClass ({
-    getErrorMessage: function(){
-        var idx = document.URL.indexOf('=');
-        if(idx > 0){
-            var message = document.URL.substring(idx+1).replace(/%20/g," ");
-            return message;
-        }
-        else
-            return "";
-    },
-
-
      render: function() {
           return (
 
@@ -89,7 +70,6 @@ var LoginNavBar  = React.createClass ({
                     <div className="container">
                         <div className="navbar-header">
                             <a className="navbar-brand" href="#">Fly Or Die</a>
-                            <p className='error-message'><code> {this.getErrorMessage()}</code> </p>
                         </div>
 
                         <div className="navbar-collapse collapse">
@@ -100,11 +80,9 @@ var LoginNavBar  = React.createClass ({
 
                     </div>
                     </nav>
-
-
-            )
+            );
 }
-})
+});
 
 var NavBar =  React.createClass ({
     outboxClick: function(){
@@ -115,95 +93,33 @@ var NavBar =  React.createClass ({
            this.props.inboxClick();
     },
 
-     render: function() {
+    render: function() {
+        return (
+            <nav className="navbar navbar-default navbar-static-top">
+                <div className="container">
 
-         return (
-              <nav className="navbar navbar-default navbar-static-top">
-                        <div className="container">
+                        <div className="navbar-header">
+                            <a className="navbar-brand" href="#">{this.props.user}</a>
+                        </div>
 
-
-                                <div className="navbar-header">
-                                    <a className="navbar-brand" href="#">{this.props.user}</a>
-                                </div>
-
-                                <div className="navbar-collapse collapse">
-                                    <ul className="nav navbar-nav navbar-right">
-                                        
-                                       <li><a href="#" onClick={this.inboxClick}>Inbox</a></li>
-                                         <li><a href="#" onClick={this.outboxClick}>Outbox</a> </li>
-                                        <li><LogoutButton /></li>
-                                    </ul>
-                                </div>
+                        <div className="navbar-collapse collapse">
+                            
+                            <ul className="nav navbar-nav navbar-right">  
+                                <li><a href="#" onClick={this.inboxClick}>Inbox</a></li>
+                                <li><a href="#" onClick={this.outboxClick}>Outbox</a> </li>
+                                <li><LogoutButton /></li>
+                            </ul>
 
                         </div>
-                    </nav>
+                </div>
+            </nav>
 
         );
      }
  });
 
 
-var Inbox = React.createClass ({
-     getInitialState: function() {
-        return {
-            inbox:[]
-        };
-    },
-
-    componentDidMount: function() {
-        $.ajax({
-            url: "inbox.json",
-            dataType: 'json',
-            success: function(data) {
-                this.setState({inbox: data});
-            }.bind(this),
-            error: function(xhr, status, err) {
-                console.error("Inbox request failed", status, err.toString());
-            }.bind(this)
-        });
-    },
-     render: function() {
-         return (
-            <div className="inbox">
-                <InboxList data={this.state.inbox}/>
-            </div>
-        )
-     }
-
-
-})
-
-var InboxList = React.createClass({
-       render: function() {
-        var inboxMessages = this.props.data.map(function (message){
-         return (
-            <InboxMessage content= {message.content}>
-            </InboxMessage>
-        );
-     });
-         return (
-            <div className= "inboxMessages">
-                {inboxMessages}
-            </div>
-        )
-     }
-});
-
-var InboxMessage = React.createClass({
-  render: function() {
-    return (
-      <div className="message">
-        <h2 className="content">
-          {this.props.content}
-        </h2>
-      </div>
-    );
-  }
-});
-
-
 var LoginBox = React.createClass({
-
     render: function() {
         return (
             <div className="loginBox">
@@ -230,21 +146,36 @@ var LoginBox = React.createClass({
 });
 
 var RegisterBox =  React.createClass({
+    
+    checkPass: function () {
+
+    var pass1 = document.getElementById('password');
+    var pass2 = document.getElementById('confirmpassword');
+    var butt =  document.getElementById("button");
+    var confirm = document.getElementById("confirm");
+
+    if(pass1.value == pass2.value){
+        confirm.className= "has-success";
+        butt.disabled=false;
+
+    } else {
+        confirm.className= "has-error";
+        butt.disabled=true;
+    }
+},
 
     render: function() {
         return (
-
-
                 <div className="container">    
-                <div className="jumbotron col-md-offset-3 col-md-6">
+                <div className="jumbotron col-md-offset-3 col-md-4">
                 <div className="registerBox">
-                    <h4>Dont have an account? Create one now.</h4>
+                    <h4 className="col-md-3 col-md-offset-4">Signup!</h4>
 
                     <form role="form" data-toggle="validator" method="post" action="/register">
                             
                         <div className="row">
                             <div className="form-group">
-                                <input type="text" pattern=".{3,}" required title="3 characters minimum" className="form-control" name="userName" id="userName" ref="userName" placeholder="Username" required />
+                                <input type="text" pattern=".{3,}" className="form-control" name="userName" id="userName" ref="userName" placeholder="Username" required />
                             </div>
                         </div>
 
@@ -252,14 +183,12 @@ var RegisterBox =  React.createClass({
                             <div className="form-group">
                                 
                                 <div className="form-group">
-                                    <input type="password" pattern=".{6,}" required title="6 characters minimum" className="form-control" name="password" id="password" ref="password" data-minlength="6" placeholder="Password" required />
-                                    <span className="help-block"></span>
+                                    <input type="password" pattern=".{6,}" className="form-control" name="password" id="password" ref="password" data-minlength="6" placeholder="Password" required />
                                 </div>
 
 
-                                <div className="form-group">
-                                    <input type="password" pattern=".{6,}" required title="6 characters minimum" className="form-control"  name="confirmpassword"  ref="confirmpassword" id="confirmpassword" data-minlength="6"   placeholder="Confirm" required />
-                                    <div className="help-block with-errors"></div>
+                                <div id="confirm" className="form-group">
+                                    <input type="password" pattern=".{6,}"  onKeyUp={this.checkPass} className="form-control" name="confirmpassword"  ref="confirmpassword" id="confirmpassword" data-minlength="6"   placeholder="Confirm" required />
                                 </div>
 
                         
@@ -268,7 +197,7 @@ var RegisterBox =  React.createClass({
 
 
                         <div className="form-group">
-                            <button type="submit" className="btn btn-primary" value="Register!">Register</button>
+                            <button id="button" disabled type="submit" className="btn btn-primary col-md-12" value="Register!">Signup</button>
                         </div>
 
 
@@ -283,8 +212,7 @@ var RegisterBox =  React.createClass({
 });
 
 
-var PostItForm = React.createClass({
-    
+var PostItForm = React.createClass({ 
     render: function() {
         return (
             <div className="messageBox">
@@ -314,6 +242,7 @@ var PostItForm = React.createClass({
     }
 });
 
+// logoutbutton -- module export this
 var LogoutButton = React.createClass({
 
     logout: function() {
@@ -333,6 +262,95 @@ var LogoutButton = React.createClass({
     }
 
 });
+
+
+
+// inbox -- module export this
+var Inbox = React.createClass ({displayName: 'Inbox',
+     getInitialState: function() {
+        return {
+            inbox:[]
+        };
+    },
+
+    componentDidMount: function() {
+        $.ajax({
+            url: "inbox.json",
+            dataType: 'json',
+            success: function(data) {
+                this.setState({inbox: data});
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error("Inbox request failed", status, err.toString());
+            }.bind(this)
+        });
+    },
+     render: function() {
+         return (
+            <div className="inbox">
+                <InboxList data={this.state.inbox}/>
+            </div>
+        )
+     }
+
+
+});
+
+var InboxList = React.createClass({
+       render: function() {
+        var inboxMessages = this.props.data.map(function (message){
+         return (
+            <InboxMessage content= {message.content} times_passed={message.times_passed} creator={message.user} received={message.time_created}>
+            </InboxMessage>
+        );
+     });
+         return (
+            <div className= "inboxMessages">
+                {inboxMessages}
+            </div>
+        )
+     }
+});
+
+var InboxMessage = React.createClass({
+
+    fly: function() {
+        $.ajax({
+            url: '/fly',
+            type: 'PUT',
+            success: function(result) {
+                 window.location = '/';
+            }
+        });
+    },
+
+
+  render: function() {
+    return (
+      <div className="message">
+        <h2 className="container content">
+            <table className="table table-responsive">
+                    <th>Inbox</th>
+                    <th>Created By</th>
+                    <th>Count</th>
+                    <th>Recieved On</th>
+                    <th></th>
+                    
+                <tr>
+                    <td>{this.props.content}</td>
+                    <td>{this.props.creator}</td>
+                    <td>{this.props.times_passed}</td>
+                    <td>{this.props.recieved}</td>
+                    <td><button type="button" className="btn btn-primary" onClick={this.fly}>FLY!</button></td>
+                    
+                </tr>
+            </table>
+        </h2>
+      </div>
+    );
+  }
+});
+
 
 
 React.render(
