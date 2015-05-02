@@ -64,13 +64,25 @@ var MainPage = React.createClass({
 });
 
 var LoginNavBar  = React.createClass ({
+
+     getErrorMessage: function(){
+        var idx = document.URL.indexOf('=');
+        if(idx > 0){
+            var message = document.URL.substring(idx+1).replace(/%20/g," ");
+            return message;
+        }
+        else
+            return "";
+    },
+
      render: function() {
           return (
 
                     <nav className="navbar navbar-default navbar-static-top">
                     <div className="container">
-                        <div className="navbar-header">
+                        <div className="navbar-header"> 
                             <a className="navbar-brand" href="#">Fly Or Die</a>
+                            <p className='error-message'><code> {this.getErrorMessage()}</code> </p> 
                         </div>
 
                         <div className="navbar-collapse collapse">
