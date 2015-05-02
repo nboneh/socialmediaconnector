@@ -237,7 +237,7 @@ var PostItForm = React.createClass({
                 <div className="row">
                     <div className="form-group col-md-12">
 
-                    <textarea className="form-control" rows="2" name="message" ref="message" placeholder="Send something to a stranger..."></textarea>
+                    <textarea required title="1 to 140 characters" className="form-control" pattern=".{1,140}" rows="2" name="message" ref="message" placeholder="Send something to a stranger..."></textarea>
 
                     </div>
 
@@ -313,7 +313,7 @@ var InboxList = React.createClass({
         render: function() {
         var inboxMessages = this.props.data.map(function (message){
          return (       
-                <InboxMessage id={message.id} content= {message.content} times_passed={message.times_passed} creator={message.user} received={message.time_created} passed={message.passed}>
+                <InboxMessage id={message.id} content= {message.content} times_passed={message.times_passed} creator={message.user} time_created={message.time_created} passed={message.passed}>
                 </InboxMessage>
         );
      });
@@ -325,7 +325,7 @@ var InboxList = React.createClass({
                     <th>Inbox</th>
                     <th>Created By</th>
                     <th>Count</th>
-                    <th>Recieved On</th>
+                    <th>Created On</th>
                 </tr>
                 </thead>
                 {inboxMessages}
@@ -351,6 +351,9 @@ var InboxMessage = React.createClass({
 
 
   render: function() {
+    var date = (new Date(this.props.time_created)).toDateString();
+
+
     if(this.props.passed){
     return (
 
@@ -358,7 +361,8 @@ var InboxMessage = React.createClass({
             <td>{this.props.content}</td>
             <td>{this.props.creator}</td>
             <td>{this.props.times_passed}</td>
-            <td>{this.props.recieved}</td>
+            <td>{date}</td>
+            <td><button type="button" disabled className="btn btn-primary" onClick={this.fly}>FLY!</button></td>
         </tr> 
     );
   } else {
@@ -367,7 +371,7 @@ var InboxMessage = React.createClass({
             <td>{this.props.content}</td>
             <td>{this.props.creator}</td>
             <td>{this.props.times_passed}</td>
-            <td>{this.props.recieved}</td>
+            <td>{date}</td>
             <td><button type="button" className="btn btn-primary" onClick={this.fly}>FLY!</button></td>
      </tr> 
      )
@@ -412,7 +416,7 @@ var OutboxList = React.createClass({
         render: function() {
         var outboxMessages = this.props.data.map(function (message){
          return (       
-                <OutboxMessage id={message.id} content= {message.content} times_passed={message.times_passed} creator={message.user} received={message.time_created}>
+                <OutboxMessage id={message.id} content= {message.content} times_passed={message.times_passed} creator={message.user} time_created={message.time_created}>
                 </OutboxMessage>
         );
      });
@@ -423,7 +427,7 @@ var OutboxList = React.createClass({
                 <tr>
                     <th>Inbox</th>
                     <th>Count</th>
-                    <th>Recieved On</th>
+                    <th>Sent On</th>
                 </tr>
                 </thead>
                 {outboxMessages}
@@ -435,13 +439,15 @@ var OutboxList = React.createClass({
 });
 
 var OutboxMessage = React.createClass({
+
   render: function() {
+    var date = (new Date(this.props.time_created)).toDateString();
     return (
 
         <tr>
             <td>{this.props.content}</td>
             <td>{this.props.times_passed}</td>
-            <td>{this.props.recieved}</td>
+            <td>{date}</td>
         </tr> 
     );
   }
