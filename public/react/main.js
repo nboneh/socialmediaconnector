@@ -300,7 +300,7 @@ var InboxList = React.createClass({
        render: function() {
         var inboxMessages = this.props.data.map(function (message){
          return (
-            <InboxMessage content= {message.content}>
+            <InboxMessage content= {message.content} times_passed={message.times_passed} creator={message.user} received={message.time_created}>
             </InboxMessage>
         );
      });
@@ -313,11 +313,38 @@ var InboxList = React.createClass({
 });
 
 var InboxMessage = React.createClass({
+
+    fly: function() {
+        $.ajax({
+            url: '/fly',
+            type: 'PUT',
+            success: function(result) {
+                 window.location = '/';
+            }
+        });
+    },
+
+
   render: function() {
     return (
       <div className="message">
-        <h2 className="content">
-          {this.props.content}
+        <h2 className="container content">
+            <table className="table table-responsive">
+                    <th>Inbox</th>
+                    <th>Created By</th>
+                    <th>Count</th>
+                    <th>Recieved On</th>
+                    <th></th>
+                    
+                <tr>
+                    <td>{this.props.content}</td>
+                    <td>{this.props.creator}</td>
+                    <td>{this.props.times_passed}</td>
+                    <td>{this.props.recieved}</td>
+                    <td><button type="button" className="btn btn-primary" onClick={this.fly}>FLY!</button></td>
+                    
+                </tr>
+            </table>
         </h2>
       </div>
     );
