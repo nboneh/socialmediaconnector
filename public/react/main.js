@@ -225,7 +225,7 @@ var RegisterBox =  React.createClass({
 
 
                         <div className="form-group">
-                            <button id="button" disabled type="submit" className="btn btn-primary col-md-12" value="Register!">Signup</button>
+                            <button id="button" disabled type="submit" className="btn btn-success col-md-12" value="Register!">Signup</button>
                         </div>
 
 
@@ -250,16 +250,16 @@ var PostItForm = React.createClass({
 
 
                 <div className="row">
-                    <div className="form-group col-md-12">
+                    <div className="form-group col-md-9">
 
-                    <textarea required title="1 to 140 characters" className="form-control" pattern=".{1,140}" rows="2" name="message" ref="message" placeholder="Send something to a stranger..."></textarea>
+                    <textarea className="form-control" pattern=".{1,140}" required title="1 to 140 characters" name="message" ref="message" placeholder="Send something to a stranger, and see how many times it gets passed on."></textarea>
 
                     </div>
 
+                    <div className="form-group">
+                    <button type="submit" className="btn btn-success col-md-2" value="Fly">LET IT FLY</button>
                 </div>
-                    
-                <div className="form-group">
-                    <button type="submit" className="btn btn-primary col-md-3" value="Fly">FLY</button>
+
                 </div>
 
                 </form>
@@ -359,8 +359,7 @@ var InboxMessage = React.createClass({
             type: 'PUT',
             data: {id: this.props.id},
             success: function(result) {
-                console.log("YO")
-                 window.location = '/';
+                window.location = '/';
             }.bind(this),
         });
     },
@@ -378,7 +377,7 @@ var InboxMessage = React.createClass({
             <td>{this.props.creator}</td>
             <td>{this.props.times_passed}</td>
             <td>{date}</td>
-            <td><button type="button" disabled className="btn btn-primary" onClick={this.fly}>FLY!</button></td>
+            <td><button type="button" disabled className="btn btn-primary" onClick={this.fly}>FLY</button></td>
         </tr> 
     );
   } else {
@@ -388,7 +387,7 @@ var InboxMessage = React.createClass({
             <td>{this.props.creator}</td>
             <td>{this.props.times_passed}</td>
             <td>{date}</td>
-            <td><button type="button" className="btn btn-primary" onClick={this.fly}>FLY!</button></td>
+            <td><button type="button" className="btn btn-primary" onClick={this.fly}>FLY</button></td>
      </tr> 
      )
 }
