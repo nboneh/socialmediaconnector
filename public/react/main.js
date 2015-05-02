@@ -319,7 +319,7 @@ var InboxMessage = React.createClass({
         $.ajax({
             url: '/fly',
             type: 'PUT',
-            data: this.props.id,
+            data: {id: this.props.id},
             success: function(result) {
                  window.location = '/';
             }
