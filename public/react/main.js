@@ -322,7 +322,7 @@ var InboxMessage = React.createClass({
             data: {id: this.props.id},
             success: function(result) {
                  window.location = '/';
-            }
+            }.bind(this),
         });
     },
 
