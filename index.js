@@ -185,7 +185,7 @@ app.post('/login', function (req, res) {
 })
 
 app.put('/fly', function (req, res) {
-    var messageId = req.body.messageId;
+    var messageId = req.body.id;
     var user_id = req.session.user_id;
     var query = "UPDATE Users set message_passed_list = array_append(message_sent_list, $1) WHERE id=" + user_id;
 
